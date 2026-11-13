@@ -1,0 +1,48 @@
+/* Kasi24 agreed colour palette - docs/design/branding/Kasi24_Agreed_Colour_Palette.png */
+:root {
+  --color-forest: #123b32;   /* logo, headings, navigation */
+  --color-green: #22a06b;    /* primary actions, success */
+  --color-gold: #f4b942;     /* featured accents, highlights */
+  --color-cream: #f7f5ef;    /* page and section backgrounds */
+  --color-charcoal: #27343a; /* body text and labels */
+
+  --radius: 10px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--color-charcoal);
+  background: var(--color-cream);
+  line-height: 1.5;
+}
+
+h1, h2, h3 { color: var(--color-forest); }
+
+a { color: var(--color-forest); }
+
+:focus-visible { outline: 3px solid var(--color-gold); outline-offset: 2px; }
+
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+.app main { flex: 1; }
+
+.container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+.header { background: var(--color-forest); }
+.header__inner { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; }
+.header__logo { color: #fff; font-weight: 800; font-size: 1.4rem; text-decoration: none; }
+.header__nav { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.header__nav a { color: #fff; text-decoration: none; }
+.header__nav a.active { text-decoration: underline; }
+
+.btn { display: inline-block; padding: 10px 18px; border: 0; border-radius: var(--radius); font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+.btn--primary { background: var(--color-green); color: #fff; }
+
+.hero { padding: 64px 0; }
+.search-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: #fff; padding: 16px; border-radius: var(--radius); }
+.search-bar input { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #ccd; border-radius: var(--radius); font: inherit; }
+
+.footer { padding: 24px 0; color: #fff; background: var(--color-charcoal); }
