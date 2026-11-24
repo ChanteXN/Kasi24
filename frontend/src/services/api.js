@@ -1,27 +1,26 @@
 import { supabase } from '../lib/supabaseClient';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
+/**
+ * Calls a route on the `api` Supabase Edge Function (trusted workflows: provider onboarding,
+ * listing create/submit, staff reviews). The signed-in user's JWT is attached automatically.
+ * Always POST. Example: callApi('listings/<id>/submit')
+ */
+export async function callApi(path, body = {}) {
+  const { data, error } = await supabase.functions.invoke(`api/${path}`, { body });
+  if (!error) return data;
 
-/** Calls the Java backend, attaching the Supabase access token when signed in. */
-export async function apiRequest(path, options = {}) {
-  const { data } = await supabase.auth.getSession();
-  const token = data?.session?.access_token;
+  const err = new Error(error.message);
+  err.status = error.context?.status;
+  // The function replies { error: "..." } with a readable message on 4xx.
+  const payload = await error.context?.json?.().catch(() => null);
+  if (payload?.error) err.message = payload.error;
+  throw err;
+}
 
-  const response = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
-  });
-
-  const body = response.status === 204 ? null : await response.json().catch(() => null);
-  if (!response.ok) {
-    const error = new Error(body?.message ?? `Request failed (${response.status})`);
-    error.status = response.status;
-    error.fieldErrors = body?.fieldErrors ?? {};
-    throw error;
-  }
-  return body;
+/** Turns a Supabase/PostgREST error into a plain Error with a friendly message. */
+export function toError(error, fallback = 'Something went wrong. Please try again.') {
+  if (!error) return null;
+  const e = new Error(error.message || fallback);
+  e.code = error.code;
+  return e;
 }

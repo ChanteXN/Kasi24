@@ -46,3 +46,35 @@ a { color: var(--color-forest); }
 .search-bar input { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #ccd; border-radius: var(--radius); font: inherit; }
 
 .footer { padding: 24px 0; color: #fff; background: var(--color-charcoal); }
+
+/* --- Supabase-connected screens --- */
+.muted { color: #5b6b72; }
+.prewrap { white-space: pre-wrap; }
+.card { background: #fff; padding: 16px; border-radius: var(--radius); margin: 16px 0; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--color-gold); color: var(--color-forest); font-size: 0.8rem; font-weight: 700; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.link-button { background: none; border: 0; padding: 0; font: inherit; color: var(--color-forest); text-decoration: underline; cursor: pointer; }
+
+.form { display: flex; flex-direction: column; gap: 14px; }
+.form label, .filters label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; }
+.form input, .form textarea, .filters input, .filters select { padding: 10px; border: 1px solid #ccd; border-radius: var(--radius); font: inherit; font-weight: 400; }
+.form-card { max-width: 520px; margin: 32px auto; }
+.form__error { color: #b3261e; font-weight: 600; }
+.form__notice { color: var(--color-forest); font-weight: 600; }
+
+.filters { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+.listing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.listing-card { padding: 0; overflow: hidden; margin: 0; }
+.listing-card__photo { width: 100%; height: 170px; object-fit: cover; display: block; }
+.listing-card__photo--empty { display: flex; align-items: center; justify-content: center; background: #e6e3d8; color: #5b6b72; }
+.listing-card__body { padding: 12px 16px 16px; }
+.listing-card__body h2 { margin: 0 0 4px; font-size: 1.1rem; }
+.listing-card__price { font-size: 1.3rem; font-weight: 800; color: var(--color-forest); margin: 4px 0; }
+
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin: 16px 0; }
+.gallery img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius); }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; }
+.facts dt { font-weight: 600; }
+.facts dd { margin: 0; }
+.chips { list-style: none; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.chips li { background: #fff; border: 1px solid #d7d3c4; padding: 4px 12px; border-radius: 999px; }
