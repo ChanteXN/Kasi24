@@ -53,7 +53,7 @@ export function findAreaByName(areas, name) {
 /**
  * @param {{ areaIds?: string[], kind?: string, maxRent?: number, sort?: 'newest'|'price_asc'|'price_desc' }} filters
  */
-export async function searchListings({ areaIds, kind, maxRent, sort = 'newest' } = {}) {
+export async function searchListings({ areaIds, kind, maxRent, sort = 'newest', limit } = {}) {
   let query = supabase.from('listings').select(LISTING_SELECT);
   if (areaIds?.length) query = query.in('area_id', areaIds);
   if (kind) query = query.eq('kind', kind);
@@ -62,6 +62,8 @@ export async function searchListings({ areaIds, kind, maxRent, sort = 'newest' }
   if (sort === 'price_asc') query = query.order('monthly_rent_zar', { ascending: true });
   else if (sort === 'price_desc') query = query.order('monthly_rent_zar', { ascending: false });
   else query = query.order('published_at', { ascending: false, nullsFirst: false });
+
+  if (limit) query = query.limit(limit);
 
   const { data, error } = await query;
   if (error) throw toError(error);
