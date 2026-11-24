@@ -12,6 +12,7 @@ export default function Header() {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/search">Accommodation</NavLink>
           <NavLink to="/compare">Compare</NavLink>
+          {!loading && user && <NavLink to="/provider">For providers</NavLink>}
           {!loading && user ? (
             <button type="button" className="btn btn--primary" onClick={() => signOut()}>Log out</button>
           ) : (
