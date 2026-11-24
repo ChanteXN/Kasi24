@@ -79,6 +79,22 @@ npm run dev
 
 The app runs on http://localhost:5173 and talks to Supabase directly.
 
+### Quick start on Windows (PowerShell)
+
+```powershell
+cd C:\2026\MPP
+git clone https://github.com/DeekayMadavha/Kasi24.git
+cd Kasi24
+git checkout develop            # integration branch; branch off it for new work
+cd frontend
+Copy-Item .env.example .env.local
+notepad .env.local              # fill in the two VITE_SUPABASE_* values (Supabase dashboard > Project Settings > API)
+npm install
+npm run dev                     # http://localhost:5173
+```
+
+Restart `npm run dev` after editing `.env.local`; Vite only reads it at startup. Check your Node version with `node -v` (20+ needed).
+
 ## Running tests
 
 ```bash
