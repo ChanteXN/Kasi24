@@ -5,7 +5,6 @@ import { LISTING_KINDS, getAreas, searchListings } from '../services/listingServ
 import heroHouse from '../assets/images/hero-house.jpg';
 import heroBedroom from '../assets/images/hero-bedroom.jpg';
 import heroLounge from '../assets/images/hero-lounge.jpg';
-import '../styles/landing.css';
 
 // Screen 01 - marketplace-style home (dense search, category tiles, live rails of listings),
 // built on the refined Kasi24 design: same palette, copy and journey (Search, Discover, Compare, Connect).
