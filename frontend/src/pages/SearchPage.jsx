@@ -16,6 +16,7 @@ export default function SearchPage() {
   const areaName = params.get('area') ?? '';
   const kind = params.get('kind') ?? '';
   const maxRent = params.get('maxRent') ?? '';
+  const q = params.get('q') ?? '';
   const sort = params.get('sort') ?? 'newest';
 
   const [areas, setAreas] = useState([]);
@@ -39,6 +40,7 @@ export default function SearchPage() {
       areaIds: selectedArea ? areaIdsWithChildren(areas, selectedArea.id) : undefined,
       kind: kind || undefined,
       maxRent: maxRent ? Number(maxRent) : undefined,
+      q: q || undefined,
       sort,
     })
       .then((rows) => {
@@ -52,7 +54,7 @@ export default function SearchPage() {
         setStatus('error');
       });
     return () => { cancelled = true; };
-  }, [areas, areaName, selectedArea, kind, maxRent, sort]);
+  }, [areas, areaName, selectedArea, kind, maxRent, q, sort]);
 
   function updateParam(key, value) {
     const next = new URLSearchParams(params);
@@ -64,6 +66,7 @@ export default function SearchPage() {
   return (
     <section>
       <h1>Stays {selectedArea ? `in ${selectedArea.name}` : ''}</h1>
+      {q && <p className="muted">Matching &ldquo;{q}&rdquo; &middot; <button type="button" className="btn btn--ghost btn--sm" onClick={() => updateParam('q', '')}>Clear</button></p>}
 
       <form className="filters card" onSubmit={(e) => e.preventDefault()} aria-label="Filter stays">
         <label>
