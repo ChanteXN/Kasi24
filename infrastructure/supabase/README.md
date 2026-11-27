@@ -4,7 +4,7 @@
 > "Kasi24 Supabase Production Schema Specification" and is richer than `migrations/20261113000001_initial_schema.sql`
 > (areas, providers, private address/evidence tables, enquiries with RLS, storage buckets, audit trail).
 > **Do not run the old initial migration or `seed.sql` against the live project** - they describe an earlier, simpler schema
-> used by the Spring Boot prototype. The React app now reads the live schema directly with `supabase-js`
+> used by an earlier Java prototype (since removed). The React app now reads the live schema directly with `supabase-js`
 > and uses the `api` Edge Function (source in `functions/api/index.ts`) for trusted workflows.
 
 Kasi24 uses Supabase for **PostgreSQL** (the database) and **Auth** (sign-up and sign-in).
@@ -14,7 +14,7 @@ Kasi24 uses Supabase for **PostgreSQL** (the database) and **Auth** (sign-up and
 1. One team member creates a project at https://supabase.com and invites the others (Project Settings → Team).
 2. Run the migrations in `migrations/` in order, in the Supabase SQL editor or with the CLI.
 3. Optionally run `seed.sql` to load **fictional** demo listings.
-4. Each developer copies the values into their own `backend/.env` and `frontend/.env.local` (see the `.env.example` files).
+4. Each developer copies the values into their own `frontend/.env.local` (see `frontend/.env.example`).
 
 ## Running locally with the Supabase CLI (optional)
 

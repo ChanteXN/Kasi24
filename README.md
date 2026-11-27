@@ -10,37 +10,25 @@ An accommodation-first platform that helps people discover local stays, compare 
 |---|---|
 | Frontend | React 18 + Vite |
 | Backend | Supabase: PostgreSQL + Row Level Security, Auth, Storage and the `api` Edge Function |
-| Legacy prototype | Java 21 / Spring Boot API in `backend/` (not used by the frontend any more) |
+| Hosting | Static frontend build; Supabase hosted project |
 
 ## Repository structure
 
 ```
 Kasi24/
-├── backend/                 Spring Boot REST API
-│   └── src/main/java/com/kasi24/
-│       ├── config/          App configuration (CORS, beans)
-│       ├── controller/      REST endpoints
-│       ├── dto/             request/ and response/ objects sent over the API
-│       ├── entity/          JPA entities mapped to database tables
-│       ├── exception/       Custom exceptions + global error handler
-│       ├── mapper/          Entity <-> DTO conversion
-│       ├── repository/      Spring Data JPA repositories
-│       ├── security/        Spring Security + Supabase JWT validation
-│       ├── service/         Business logic interfaces (impl/ for implementations)
-│       └── util/            Shared helpers and constants
 ├── frontend/                React app
 │   └── src/
 │       ├── components/      Reusable UI (common/, layout/, listings/)
 │       ├── pages/           One page per screen design
 │       ├── routes/          React Router setup
-│       ├── services/        Calls to the backend API
+│       ├── services/        All Supabase / Edge Function calls (pages never call Supabase directly)
 │       ├── context/         Auth and other shared state
 │       ├── hooks/           Custom React hooks
 │       ├── lib/             Supabase client
 │       ├── styles/          Global CSS and brand colours
 │       └── utils/           Helpers
 ├── infrastructure/
-│   ├── supabase/            SQL migrations and seed data
+│   ├── supabase/            Migrations, `api` Edge Function, seed data
 │   ├── docker/              Dockerfiles and docker-compose
 │   └── scripts/             Dev and deployment scripts
 ├── tests/                   End-to-end, integration and performance tests
@@ -52,8 +40,6 @@ Kasi24/
 
 ### Prerequisites
 
-- Java 21
-- Maven 3.9+ (or the Maven bundled with IntelliJ IDEA)
 - Node.js 20+
 - Access to the team Supabase project
 
@@ -98,7 +84,6 @@ Restart `npm run dev` after editing `.env.local`; Vite only reads it at startup.
 ## Running tests
 
 ```bash
-cd backend && mvn test
 cd frontend && npm test
 ```
 
