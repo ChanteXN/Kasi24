@@ -25,7 +25,7 @@
 
 ## Code conventions
 
-**Backend:** controllers only handle HTTP and call services; business logic goes in `service/impl`; never return entities from controllers, map them to DTOs; validate requests with `jakarta.validation` annotations.
+**Backend (Supabase):** schema changes only via new migration files; every table needs RLS; privileged workflows (approvals, onboarding) go through the `api` Edge Function, never the browser; no service_role key outside Edge Functions.
 
 **Frontend:** one page component per screen in `pages/`; reusable pieces in `components/`; all API calls go through `services/`; use the colour variables in `styles/global.css`.
 

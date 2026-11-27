@@ -1,19 +1,10 @@
-# Runs backend + frontend against your Supabase project.
+# Serves the built frontend. The backend is Supabase (hosted), so there is no API container.
 # From the repo root:  docker compose -f infrastructure/docker/docker-compose.yml up --build
+# Note: VITE_SUPABASE_* values are baked in at build time; export them in your shell first.
 services:
-  backend:
-    build:
-      context: ../..
-      dockerfile: infrastructure/docker/backend.Dockerfile
-    env_file: ../../backend/.env
-    ports:
-      - "8080:8080"
-
   frontend:
     build:
       context: ../..
       dockerfile: infrastructure/docker/frontend.Dockerfile
     ports:
       - "3000:80"
-    depends_on:
-      - backend
