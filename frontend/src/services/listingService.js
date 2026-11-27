@@ -53,8 +53,11 @@ export function findAreaByName(areas, name) {
 /**
  * @param {{ areaIds?: string[], kind?: string, maxRent?: number, sort?: 'newest'|'price_asc'|'price_desc' }} filters
  */
-export async function searchListings({ areaIds, kind, maxRent, sort = 'newest', limit } = {}) {
+export async function searchListings({ areaIds, kind, maxRent, q, sort = 'newest', limit } = {}) {
   let query = supabase.from('listings').select(LISTING_SELECT);
+  // Keyword search on title/description; strip characters that have meaning in PostgREST filters.
+  const term = q?.replace(/[%,()*\\]/g, ' ').trim();
+  if (term) query = query.or(`title.ilike.%${term}%,description.ilike.%${term}%`);
   if (areaIds?.length) query = query.in('area_id', areaIds);
   if (kind) query = query.eq('kind', kind);
   if (maxRent) query = query.lte('monthly_rent_zar', maxRent);
