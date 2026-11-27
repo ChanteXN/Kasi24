@@ -6,7 +6,7 @@
 | `design/` | UI/UX screen designs (PDF), logo and branding concepts |
 | `design/screens/` | PNG of each screen (01 Landing to 06 Enquiry), one per frontend page |
 | `design/branding/` | Logo options, design system and the agreed colour palette |
-| `architecture/` | System diagrams, data model, how frontend, backend and Supabase connect |
+| `architecture/` | System diagrams, data model, how the frontend, Supabase and the Edge Function connect |
 | `api/` | REST endpoint documentation |
 | `decisions/` | Architecture Decision Records: one short file per important technical decision |
 | `meeting-notes/` | Team meeting notes, named `YYYY-MM-DD-topic.md` |
