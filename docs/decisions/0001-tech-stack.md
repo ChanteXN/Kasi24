@@ -1,6 +1,6 @@
 # 0001 - Tech stack
 
-**Status:** Accepted
+**Status:** Superseded by [0002](0002-supabase-backend-vercel-hosting.md) for the backend (Java was removed)
 **Date:** 2026-11-13
 
 ## Decision

@@ -1,13 +1,23 @@
-name: CI
+name: CI/CD
+
+# Pull requests: test frontend, lint the Edge Function, deploy a Vercel preview.
+# Merge to main: the same checks, then deploy Supabase (migrations + Edge Function) and Vercel production.
+# Required secrets and setup steps: docs/deployment.md
 
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  frontend:
+  frontend-test:
+    name: Frontend - test & build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,3 +32,74 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+
+  backend-check:
+    name: Backend - lint Edge Function
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno lint backend/supabase/functions
+
+  deploy-backend:
+    name: Deploy Supabase (production)
+    needs: [frontend-test, backend-check]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
+      - name: Apply new migrations
+        # Skipped until the live schema has been captured with `supabase db pull` (see backend/README.md).
+        run: |
+          if ls supabase/migrations/*.sql >/dev/null 2>&1; then
+            supabase db push
+          else
+            echo "No migrations in backend/supabase/migrations yet - skipping db push."
+          fi
+      - name: Deploy Edge Function
+        run: supabase functions deploy api --project-ref "$SUPABASE_PROJECT_REF"
+
+  deploy-frontend:
+    name: Deploy Vercel (${{ github.event_name == 'push' && 'production' || 'preview' }})
+    needs: [frontend-test, deploy-backend]
+    # Run after the backend deploy on main; on PRs deploy-backend is skipped, so allow that.
+    # PRs from forks get no secrets, so they skip the preview.
+    if: >-
+      always() && needs.frontend-test.result == 'success' &&
+      (needs.deploy-backend.result == 'success' || needs.deploy-backend.result == 'skipped') &&
+      ((github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ENV: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+      PROD_FLAG: ${{ github.event_name == 'push' && '--prod' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --global vercel@39.1.1
+      # Pulls project settings + environment variables (VITE_SUPABASE_*) from Vercel.
+      - run: vercel pull --yes --environment="$VERCEL_ENV" --token="$VERCEL_TOKEN"
+      - run: vercel build $PROD_FLAG --token="$VERCEL_TOKEN"
+      - id: deploy
+        run: echo "url=$(vercel deploy --prebuilt $PROD_FLAG --token="$VERCEL_TOKEN")" >> "$GITHUB_OUTPUT"
+      - run: echo "Deployed to ${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"

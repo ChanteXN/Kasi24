@@ -1,25 +1,20 @@
 # Kasi24 documentation
 
-| Folder | Contents |
+| Path | Contents |
 |---|---|
 | `requirements/` | Workstream 1 Product & Customer Experience pack: scope, users, use cases (UC-01 to UC-05), user stories and acceptance criteria |
 | `design/` | UI/UX screen designs (PDF), logo and branding concepts |
-| `design/screens/` | PNG of each screen (01 Landing to 06 Enquiry), one per frontend page |
+| `design/screens/` | PNG of each original screen design (01 Landing to 06 Enquiry) |
 | `design/branding/` | Logo options, design system and the agreed colour palette |
-| `architecture/` | System diagrams, data model, how the frontend, Supabase and the Edge Function connect |
-| `api/` | REST endpoint documentation |
+| `architecture/overview.md` | How the frontend, Supabase and the Edge Function connect, and the security rules |
+| `deployment.md` | Vercel + Supabase hosting, CI/CD pipeline, secrets, rollback |
+| `api/` | API notes. The Edge Function routes are listed in [backend/README.md](../backend/README.md) |
 | `decisions/` | Architecture Decision Records: one short file per important technical decision |
 | `meeting-notes/` | Team meeting notes, named `YYYY-MM-DD-topic.md` |
-
-## Current API
-
-| Method | Path | Auth | Purpose |
-|---|---|---|---|
-| GET | `/api/health` | Public | Health check |
-| GET | `/api/listings?area=` | Public | Search listings by area (UC-01) |
-| GET | `/api/listings/{id}` | Public | Listing details (UC-02) |
-| POST | `/api/enquiries` | Public | Send an enquiry to a provider (UC-04) |
+| `archive/` | Superseded material kept for reference only |
 
 ## Design note
 
-All sample listing names, prices and areas in the designs and in `infrastructure/supabase/seed.sql` are **fictional** layout examples.
+All sample listing names, prices, ratings and areas in the designs are **fictional** layout examples. Do not present them as real listings or market prices.
+
+The Workstream 1 pack describes the first concept (short stays, enquiries without an account). The product has since moved to monthly rentals in Khayelitsha with signed-in enquiries and provider verification. The code and `architecture/overview.md` describe the current product.

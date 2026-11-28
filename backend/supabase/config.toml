@@ -1,0 +1,11 @@
+# Supabase CLI project config. Settings not listed here use the CLI defaults.
+# Full reference: https://supabase.com/docs/guides/local-development/cli/config
+project_id = "kasi24"
+
+[db]
+major_version = 15
+
+# Trusted workflows (onboarding, listing submit, staff reviews).
+# The gateway checks the caller's JWT, and the function checks role and ownership again in code.
+[functions.api]
+verify_jwt = true

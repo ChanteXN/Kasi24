@@ -17,9 +17,9 @@ Storage: public-listing-images, listing-image-staging, verification-documents, a
 2. Anything that reads or writes the `private` schema or changes status (onboarding, submit, approve/reject) goes through the `api` Edge Function. Routes: `provider/onboard`, `listings`, `listings/<id>/submit`, `listings/<id>/review`, `evidence/<id>/review`, `providers/<id>/review`.
 3. The frontend holds only the publishable key. The service_role key exists only as an Edge Function secret.
 4. Customers see only approved, available, non-fictional listings and only area-level location. Exact addresses stay private.
-5. Schema changes are new files in `infrastructure/supabase/migrations/`; never edit an applied migration.
+5. Schema changes are new files in `backend/supabase/migrations/`; never edit an applied migration.
 6. Staff roles (`moderator`, `admin`) are granted in `private.user_roles` by a database admin, never from the app.
 
 ## History
 
-The project started with a Java 21 / Spring Boot API in `backend/`. It was replaced by Supabase and removed; see git history before this change if it is needed.
+The project started with a Java 21 / Spring Boot API in `backend/`. It was replaced by Supabase (see [decision 0002](../decisions/0002-supabase-backend-vercel-hosting.md)), and `backend/` now holds the Supabase project. The Java code is in git history before that change.
